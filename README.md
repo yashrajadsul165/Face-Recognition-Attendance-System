@@ -117,7 +117,7 @@ python -m unittest discover -s tests -v
 
 **Yashraj Adsul**
 
-[LinkedIn](https://www.linkedin.com/in/yashraj-adsul-b69a8b2b4) · [Email](mailto:yashrajadsul165@gmail.com)
+[LinkedIn](https://www.linkedin.com/in/yashraj-adsul) · [Email](mailto:yashrajadsul165@gmail.com)
 
 ## License
 
