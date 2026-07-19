@@ -6,6 +6,12 @@
 
 A working Python application that recognises registered faces through a webcam and records attendance automatically in a daily CSV file.
 
+## Live dashboard
+
+[**Open the deployed Streamlit attendance dashboard**](https://face-recognition-attendance-system-2j2pc2cuvpcclwxrp8sfmf.streamlit.app)
+
+The hosted dashboard analyses attendance CSV records and uses privacy-safe synthetic sample data by default.
+
 ## Features
 
 - Registers a person from one clear reference image
