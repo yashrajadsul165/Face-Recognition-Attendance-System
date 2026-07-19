@@ -4,7 +4,7 @@ import unittest
 from datetime import datetime
 from pathlib import Path
 
-from app import mark_attendance, safe_name
+from app import load_marked_names, mark_attendance, safe_name
 
 
 class SafeNameTests(unittest.TestCase):
@@ -39,6 +39,9 @@ class AttendanceTests(unittest.TestCase):
             self.assertEqual(len(rows), 1)
             self.assertEqual(rows[0]["name"], "Demo User")
             self.assertEqual(rows[0]["face_distance"], "0.3210")
+            self.assertEqual(
+                load_marked_names(output_directory, timestamp), {"Demo User"}
+            )
 
 
 if __name__ == "__main__":

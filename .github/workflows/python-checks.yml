@@ -17,7 +17,7 @@ jobs:
           python-version: "3.11"
 
       - name: Compile application
-        run: python -m compileall app.py
+        run: python -m compileall app.py dashboard
 
       - name: Run unit tests
         run: python -m unittest discover -s tests -v

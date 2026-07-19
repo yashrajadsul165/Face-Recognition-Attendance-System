@@ -102,6 +102,24 @@ def load_known_faces() -> tuple[list[object], list[str]]:
     return encodings, names
 
 
+def load_marked_names(
+    attendance_dir: Path = ATTENDANCE_DIR,
+    now: datetime | None = None,
+) -> set[str]:
+    """Return names already recorded on the selected day."""
+    timestamp = now or datetime.now()
+    csv_path = attendance_dir / f"attendance_{timestamp:%Y-%m-%d}.csv"
+    if not csv_path.exists():
+        return set()
+
+    with csv_path.open("r", newline="", encoding="utf-8") as csv_file:
+        return {
+            row["name"]
+            for row in csv.DictReader(csv_file)
+            if row.get("name")
+        }
+
+
 def mark_attendance(
     name: str,
     face_distance: float | None = None,
@@ -117,12 +135,7 @@ def mark_attendance(
     attendance_dir.mkdir(parents=True, exist_ok=True)
     csv_path = attendance_dir / f"attendance_{timestamp:%Y-%m-%d}.csv"
 
-    existing_names: set[str] = set()
-    if csv_path.exists():
-        with csv_path.open("r", newline="", encoding="utf-8") as csv_file:
-            existing_names = {
-                row["name"] for row in csv.DictReader(csv_file) if row.get("name")
-            }
+    existing_names = load_marked_names(attendance_dir, timestamp)
 
     if name in existing_names:
         return False
@@ -172,6 +185,7 @@ def run_camera(
     if not camera.isOpened():
         raise RuntimeError(f"Could not open camera {camera_index}.")
 
+    marked_names = load_marked_names()
     print("Attendance camera started. Press q in the camera window to exit.")
     try:
         while True:
@@ -199,8 +213,10 @@ def run_camera(
 
                 if best_distance <= tolerance:
                     name = known_names[best_match_index]
-                    if mark_attendance(name, best_distance):
-                        print(f"Attendance marked for {name}.")
+                    if name not in marked_names:
+                        if mark_attendance(name, best_distance):
+                            print(f"Attendance marked for {name}.")
+                        marked_names.add(name)
 
                 top, right, bottom, left = (
                     top * 4,
